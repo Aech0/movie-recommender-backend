@@ -1,4 +1,4 @@
-import requests
+import urllib.request
 import os
 
 def download_lfs_file(repo_owner, repo_name, file_path, branch='main'):
@@ -7,14 +7,11 @@ def download_lfs_file(repo_owner, repo_name, file_path, branch='main'):
     url = f"https://github.com/{repo_owner}/{repo_name}/raw/{branch}/{file_path}"
     
     print(f"Downloading {file_path}...")
-    response = requests.get(url, allow_redirects=True)
-    
-    if response.status_code == 200:
-        with open(file_path, 'wb') as f:
-            f.write(response.content)
+    try:
+        urllib.request.urlretrieve(url, file_path)
         print(f"✓ Downloaded {file_path}")
-    else:
-        print(f"✗ Failed to download {file_path}: {response.status_code}")
+    except Exception as e:
+        print(f"✗ Failed to download {file_path}: {e}")
         raise Exception(f"Failed to download {file_path}")
 
 if __name__ == "__main__":
